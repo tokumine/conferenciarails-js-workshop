@@ -39,5 +39,15 @@ var Point = Backbone.Model.extend({
 
 var Points = Backbone.Collection.extend({
   model:Point,
-  localStorage: new Store("points")
+  localStorage: new Store("points_3"),
+  initialize: function (argument) {
+    this.bind("add", this.closeInfowindows);
+  },
+  closeInfowindows: function () {
+    this.each(function(point){
+      if (point.infowindow) {
+        point.infowindow.close();
+      }
+    });
+  }
 });

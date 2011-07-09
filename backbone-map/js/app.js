@@ -1,15 +1,30 @@
+var canvas;
 $(function() {
   var PointView = Backbone.View.extend({
     initialize: function(){
-      _.bindAll(this, "render", "dragMarker");
+      _.bindAll(this, "render", "dragMarker", "openInfowindow");
 
       this.model.bind('change', this.render);
       this.model.marker = new google.maps.Marker({ position: this.model.getLatLng(), map: canvas, draggable:true});
 
       google.maps.event.addListener(this.model.marker, 'dragend', this.dragMarker);
+      google.maps.event.addListener(this.model.marker, 'click', this.openInfowindow);
     },
     dragMarker: function (event) {
       this.model.save({lat:event.latLng.lat(), lng:event.latLng.lng()});
+    },
+    closeInfowindow: function (event) {
+      if (this.model.infowindow) {
+        this.model.infowindow.close();
+      }
+    },
+    openInfowindow: function (event) {
+      this.model.collection.closeInfowindows();
+
+      if (!this.model.infowindow) {
+        this.model.infowindow = new google.maps.InfoWindow({ content: "<input type='text' class='t' /><br />"  + JSON.stringify(this.model) });
+      }
+      this.model.infowindow.open(canvas,this.model.marker);
     },
     render:function(){
       this.model.marker.setPosition(this.model.getLatLng());
