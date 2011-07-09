@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.1.0/jasmine_favicon.png">
+
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.1.0/jasmine.css">
+  <script type="text/javascript" src="lib/jasmine-1.1.0/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine-1.1.0/jasmine-html.js"></script>
+
+  <script type="text/javascript" src="lib/sinon-1.1.1.js"></script>
+  <script src="lib/jasmine-sinon.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="http://www.google.com/jsapi"></script>
+	<script>google.load("jquery", "1.4");</script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
+
+  <script src="js/plugins/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/plugins/json2.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/plugins/backbone-min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/plugins/backbone-localstorage.js" type="text/javascript" charset="utf-8"></script>
+
+  <script type="text/javascript" src="js/tools.js"></script>
+  <script type="text/javascript" src="js/model.js"></script>
+  <script type="text/javascript" src="spec/model_spec.js"></script>
+  <script type="text/javascript" src="spec/collection_spec.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var trivialReporter = new jasmine.TrivialReporter();
+
+      jasmineEnv.addReporter(trivialReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return trivialReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>
