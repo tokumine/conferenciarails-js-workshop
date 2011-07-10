@@ -1,7 +1,6 @@
 Node.JS GeoChat server
 ======================
 
-
 Install
 --------
 
