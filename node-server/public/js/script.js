@@ -108,21 +108,24 @@ $(function(){
     el:"#content",
     initialize:function(){
       this.map = new Map;
+      this.initializeMap();
+
+      this.player_markers = {};
       this.log = new Log;
       this.userList = new UserList;
       this.userListView = new UserListView({collection:this.userList});
 
-      _.bindAll(this, "onReady", "onAnnouncement", "onUsernames", "addUser");
+      _.bindAll(this, "onReady", "onAnnouncement", "onUsernames", "onLocationData", "addUser");
 
       this.socket = io.connect(); // SET this to your IP :) (192.168.1.35)
       this.socket.on('ready', this.onReady);
       this.socket.on('announcement', this.onAnnouncement);
       this.socket.on('usernames', this.onUsernames);
+      this.socket.on("location_data", this.onLocationData);
 
       this.user = new User({me:true});
       this.userView = new UserView({model:this.user});
 
-      this.initializeMap();
     },
     onReady:function(){
       this.log.render('You are now connected!');
@@ -132,8 +135,29 @@ $(function(){
       this.log.render(msg);
     },
     onUsernames:function(data){
+      this.updateUserList(data);
+    },
+    updateUserList:function(usernames){
       this.userList.reset();
-      _.each(data, this.addUser);
+      _.each(usernames, this.addUser);
+    },
+    onLocationData:function(user, data){
+      console.log("-", user, data);
+
+      console.log(user, this.player_markers);
+//      usernames[user] = data;
+//
+      // add markers or update player marker location
+      var p_loc = new L.LatLng(data.latitude, data.longitude);
+      if (this.player_markers && this.player_markers[user] !== undefined) {
+        this.player_markers[user].setLatLng(p_loc);
+      } else {
+        var p_marker = new L.Marker(p_loc, {icon: this.redIcon});
+        this.mapCanvas.addLayer(p_marker);
+        this.player_markers[user] = p_marker;
+      }
+
+//      this.updateUserList(data);
     },
     addUser:function(status, username){
       var user = {username:username, status:status};
@@ -142,15 +166,14 @@ $(function(){
     },
     initializeMap: function(){
       var DotIcon = L.Icon.extend({ iconUrl: 'js/images/blue_dot_circle.png', shadowUrl: null, iconSize: new L.Point(38, 38), iconAnchor: new L.Point(19, 19), popupAnchor: new L.Point(0, 0) });
-      var blueIcon = new DotIcon();
-      var redIcon = new DotIcon('js/images/red_dot_circle.png');
+      this.blueIcon = new DotIcon();
+      this.redIcon = new DotIcon('js/images/red_dot_circle.png');
 
       this.mapCanvas = new L.Map('map'), cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: this.map.get("maxZoom"), attribution: "cloudmade"});
 
         this.mapCanvas.setView(this.map.getLocation(), this.map.get("zoom")).addLayer(cloudmade),
-      this.my_marker = new L.Marker(this.map.getLocation(), {icon: blueIcon});
+      this.my_marker = new L.Marker(this.map.getLocation(), {icon: this.blueIcon});
       this.mapCanvas.addLayer(this.my_marker);
-      player_markers = {};
     }
   });
 
