@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <script>
+
+      // SET this to your IP :)
+      var socket = io.connect('http://192.168.1.35');
+  
+      socket.emit('username', prompt('Hi there! Please enter your username'));
+      
+      socket.on('ready', function () {
+        logger('You are now connected!');
+        
+        navigator.geolocation.getCurrentPosition(geo_ok, geo_err, {maximumAge: 100});
+        
+        setInterval(function(){
+          navigator.geolocation.getCurrentPosition(geo_ok, geo_err, {maximumAge: 100});
+        }, 5000);
+        
+      });
+      
+      socket.on('announcement', function (msg){
+        logger(msg);
+      });
+
+      socket.on('usernames', function (data){
+        console.log(data);
+        $('#users').html(JSON.stringify(data));
+      });
+      
+      socket.on('location_data', function (user, data){
+        console.log(user);
+        console.log(data);
+        $('#locations').append(JSON.stringify(data));
+      });
+                        
+      function logger(message){
+        $('#log').append('<li>' + message + '</li>')
+      }
+      
+      function geo_ok(position){
+        // show your location in log
+        logger(JSON.stringify(position));
+        
+        // sent your location to all the other users
+        socket.emit('update_location', position);        
+      }
+      
+      function geo_err(){
+         logger('Unable to determine your location.');
+      }
+      
+    </script>
+  </head>
+
+  <body>
+    Realtime Geolocation API test
+    
+    <h5>Users</h5>    
+    <div id="users"> </div>
+
+    <h5>Locations</h5>    
+    <div id="locations"> </div>
+
+    <h5>Log</h5>    
+    <div id="log_container">
+      <ul id="log">
+      </ul>  
+    </div>
+  </body>
+</html>  
