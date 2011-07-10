@@ -7,9 +7,14 @@ body{
 h1{
   color: #fff;
   font-size:3em;
-  font-family: 'Lobster Two', cursive;  
+  font-family: 'Lobster Two', cursive;
 }
 
 #map{
+  width:500px;
+  height:500px;
   border: 10px solid #bbb;
 }
+
+#user {margin-bottom: 5px;}
+#user input {padding:3px 5px; width:520px; font-size:14px;}

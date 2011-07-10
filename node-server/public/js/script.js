@@ -143,9 +143,8 @@ $(function(){
     },
     onLocationData:function(user, data){
       console.log("-", user, data);
-
       console.log(user, this.player_markers);
-//      usernames[user] = data;
+//    usernames[user] = data;
 //
       // add markers or update player marker location
       var p_loc = new L.LatLng(data.latitude, data.longitude);
