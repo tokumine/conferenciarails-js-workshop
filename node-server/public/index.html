@@ -26,7 +26,7 @@
       </div>
 
       <h4>Users</h4>
-      <div id="users"></div>
+      <ul id="users"></ul>
 
       <h4>Log</h4>
       <div id="log_container"></div>
@@ -34,6 +34,10 @@
 
     <script type="text/template" id="log-template">
       <li><%= message %></li>
+    </script>
+
+    <script type="text/template" id="userlist-template">
+      <li><%= username %></li>
     </script>
   </body>
 </html>

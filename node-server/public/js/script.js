@@ -27,6 +27,10 @@ $(function(){
     }
   });
 
+  var UserList = Backbone.Collection.extend({
+    model:User
+  });
+
   var Map = Backbone.Model.extend({
     defaults:{
       lat: 51.505,
@@ -39,12 +43,28 @@ $(function(){
     }
   });
 
+  var UserListView = Backbone.View.extend({
+    el:"#users",
+    template:_.template($("#userlist-template").html()),
+    initialize: function(){
+      _.bindAll(this, "render", "refresh");
+    },
+    refresh:function(){
+      $(this.el).html("");
+      this.collection.each(this.render);
+    },
+    render:function(user){
+      console.log(user);
+       $(this.el).append(this.template(user.toJSON()));
+      return this;
+    }
+  });
+
   var Log = Backbone.View.extend({
     el:"#log_container",
     template:_.template($("#log-template").html()),
     initialize: function(){
-      var ul = this.make("ul");
-      $(this.el).append(ul);
+      $(this.el).append(this.make("ul"));
     },
     render:function(message){
       $(this.el).find("ul").prepend(this.template({message:message}));
@@ -56,8 +76,10 @@ $(function(){
     initialize:function(){
       this.map = new Map;
       this.log = new Log;
+      this.userList = new UserList;
+      this.userListView = new UserListView({collection:this.userList});
 
-      _.bindAll(this, "onReady", "onAnnouncement");
+      _.bindAll(this, "onReady", "onAnnouncement", "onUsernames", "addUser");
 
       this.socket = io.connect(); // SET this to your IP :) (192.168.1.35)
       this.socket.on('ready', this.onReady);
@@ -77,8 +99,16 @@ $(function(){
     },
     onUsernames:function(data){
       console.log(data);
-      this.usernames = data;
-      //updateUserlist();
+      this.userList.reset();
+      _.each(data, this.addUser);
+    },
+    addUser:function(status, username){
+      var user = {username:username, status:status};
+      this.userList.add(user);
+      this.userListView.refresh();
+
+      //var view = new UserListView({model:user});
+      //$(this.el).find("ul").prepend(view.el);
     },
     initializeMap: function(){
       var DotIcon = L.Icon.extend({ iconUrl: 'js/images/blue_dot_circle.png', shadowUrl: null, iconSize: new L.Point(38, 38), iconAnchor: new L.Point(19, 19), popupAnchor: new L.Point(0, 0) });
