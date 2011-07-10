@@ -1,0 +1,15 @@
+body{
+  background: #333;
+  color:#fff;
+  font-family: helvetica, arial, sans-serif;
+}
+
+h1{
+  color: #fff;
+  font-size:3em;
+  font-family: 'Lobster Two', cursive;  
+}
+
+#map{
+  border: 10px solid #bbb;
+}
