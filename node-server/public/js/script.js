@@ -5,7 +5,7 @@ $(function(){
       me: false
     },
     initialize:function() {
-      this.bind("change", function(){
+      this.bind("change:username", function(){
         app.socket.emit('username', this.get("username"));
       });
     }
@@ -21,8 +21,12 @@ $(function(){
     },
     onEnterKey:function (e) {
       if (e.keyCode == 13) { // 13 == Enter
-        this.model.set({username:e.target.value});
-        $(this.el).find("input").fadeOut("slow");
+        var username = e.target.value;
+        this.model.set({username:username});
+
+        $(this.el).find("input").fadeOut("slow", function() {
+          $(this).parent().append("Welcome, " + username);
+        });
       }
     }
   });
@@ -54,23 +58,49 @@ $(function(){
       this.collection.each(this.render);
     },
     render:function(user){
-      console.log(user);
-       $(this.el).append(this.template(user.toJSON()));
+      $(this.el).append(this.template(user.toJSON()));
       return this;
     }
+  });
+
+  /* LOG SYSTEM */
+  var LogItem = Backbone.Model.extend({});
+
+  var LogList = Backbone.Collection.extend({
+    model:LogItem
   });
 
   var Log = Backbone.View.extend({
     el:"#log_container",
     template:_.template($("#log-template").html()),
     initialize: function(){
+
+      _.bindAll(this, "onAdd", "onReset");
+
+      this.collection = new LogList;
+      this.collection.bind("add", this.onAdd);
+      this.collection.bind("reset", this.onReset);
+
       $(this.el).append(this.make("ul"));
+    },
+    add:function(message){
+      this.collection.add({message: message});
+      this.render(message);
+    },
+    onAdd:function () {
+      if (this.collection.length > 25) {
+        this.collection.reset();
+      }
+    },
+    onReset:function () {
+      $(this.el).find("ul").html("");
     },
     render:function(message){
       $(this.el).find("ul").prepend(this.template({message:message}));
     }
   });
 
+  /* NAVIGATOR */
   var Navigator = Backbone.View.extend({
     initialize:function(){
       _.bindAll(this, "locate", "geoOk", "geoErr");
@@ -87,7 +117,6 @@ $(function(){
 
       // centre map on your location
       var you = new L.LatLng(position.coords.latitude, position.coords.longitude);
-      console.log(app.mapCanvas.getZoom());
       app.mapCanvas.setView(you, app.mapCanvas.getZoom());
 
       // update your marker position
@@ -117,6 +146,7 @@ $(function(){
 
       _.bindAll(this, "onReady", "onAnnouncement", "onUsernames", "onLocationData", "addUser");
 
+      // Socket configuration && bindings
       this.socket = io.connect(); // SET this to your IP :) (192.168.1.35)
       this.socket.on('ready', this.onReady);
       this.socket.on('announcement', this.onAnnouncement);
@@ -128,11 +158,11 @@ $(function(){
 
     },
     onReady:function(){
-      this.log.render('You are now connected!');
+      this.log.add('You are now connected!');
       this.navigator = new Navigator;
     },
     onAnnouncement:function (msg) {
-      this.log.render(msg);
+      this.log.add(msg);
     },
     onUsernames:function(data){
       this.updateUserList(data);
@@ -142,10 +172,6 @@ $(function(){
       _.each(usernames, this.addUser);
     },
     onLocationData:function(user, data){
-      console.log("-", user, data);
-      console.log(user, this.player_markers);
-//    usernames[user] = data;
-//
       // add markers or update player marker location
       var p_loc = new L.LatLng(data.latitude, data.longitude);
       if (this.player_markers && this.player_markers[user] !== undefined) {
@@ -155,8 +181,6 @@ $(function(){
         this.mapCanvas.addLayer(p_marker);
         this.player_markers[user] = p_marker;
       }
-
-//      this.updateUserList(data);
     },
     addUser:function(status, username){
       var user = {username:username, status:status};

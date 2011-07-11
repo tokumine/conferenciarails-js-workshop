@@ -10,6 +10,10 @@ h1{
   font-family: 'Lobster Two', cursive;
 }
 
+#content {
+  width:520px;
+
+}
 #map{
   width:500px;
   height:500px;
@@ -19,3 +23,12 @@ h1{
 #user {margin-bottom: 5px;}
 #user input {padding:3px 5px; width:520px; font-size:14px;}
 div.your-location {background:#bbb; color:#333; padding:0 5px 5px 5px; width:510px; font-size:12px;}
+
+div.block {
+  padding:10px 5px;
+  background:#ccc;
+  color:#333;
+  border-bottom: 1px solid #bbb;
+}
+div.block ul { margin:0;}
+div.block h4 { margin:0 0 5px 0;}
