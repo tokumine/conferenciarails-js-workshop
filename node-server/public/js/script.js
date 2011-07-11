@@ -63,7 +63,7 @@ $(function(){
       this.redIcon  = new DotIcon('js/images/red_dot_circle.png');
 
       cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png';
-        cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: this.map.get("maxZoom"), attribution: "cloudmade"});
+        cloudmadeLayer = new L.TileLayer(cloudmadeUrl, {maxZoom: this.map.get("maxZoom"), attribution: "cloudmade"});
 
       this.canvas = new L.Map('map'), cloudmadeUrl, cloudmadeLayer;
 
