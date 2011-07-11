@@ -47,6 +47,42 @@ $(function(){
     }
   });
 
+  var MapView = Backbone.View.extend({
+    initialize: function(){
+      this.map = new Map;
+
+      var DotIcon = L.Icon.extend({
+        iconUrl: 'js/images/blue_dot_circle.png',
+        shadowUrl: null,
+        iconSize: new L.Point(38, 38),
+        iconAnchor: new L.Point(19, 19),
+        popupAnchor: new L.Point(0, 0)
+      });
+
+      this.blueIcon = new DotIcon();
+      this.redIcon  = new DotIcon('js/images/red_dot_circle.png');
+
+      cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png';
+        cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: this.map.get("maxZoom"), attribution: "cloudmade"});
+
+      this.canvas = new L.Map('map'), cloudmadeUrl, cloudmadeLayer;
+
+      this.setView(this.map.getLocation(), this.map.get("zoom")).addLayer(cloudmadeLayer),
+      this.my_marker = new L.Marker(this.map.getLocation(), {icon: this.blueIcon});
+
+      this.addLayer(this.my_marker);
+    },
+    addLayer:function(layer){
+      this.canvas.addLayer(layer);
+    },
+    setView:function(location, zoom){
+      return this.canvas.setView(location, zoom);
+    },
+    getZoom:function () {
+      return this.canvas.getZoom();
+    }
+  });
+
   var UserListView = Backbone.View.extend({
     el:"#users",
     template:_.template($("#userlist-template").html()),
@@ -117,10 +153,10 @@ $(function(){
 
       // centre map on your location
       var you = new L.LatLng(position.coords.latitude, position.coords.longitude);
-      app.mapCanvas.setView(you, app.mapCanvas.getZoom());
+      app.map.setView(you, app.map.getZoom());
 
       // update your marker position
-      app.my_marker.setLatLng(you);
+      app.map.my_marker.setLatLng(you);
 
       // sent your location to all the other users
       app.socket.emit('update_location', position.coords);
@@ -136,8 +172,7 @@ $(function(){
   var AppView = Backbone.View.extend({
     el:"#content",
     initialize:function(){
-      this.map = new Map;
-      this.initializeMap();
+      this.map = new MapView;
 
       this.player_markers = {};
       this.log = new Log;
@@ -174,11 +209,12 @@ $(function(){
     onLocationData:function(user, data){
       // add markers or update player marker location
       var p_loc = new L.LatLng(data.latitude, data.longitude);
+
       if (this.player_markers && this.player_markers[user] !== undefined) {
         this.player_markers[user].setLatLng(p_loc);
       } else {
-        var p_marker = new L.Marker(p_loc, {icon: this.redIcon});
-        this.mapCanvas.addLayer(p_marker);
+        var p_marker = new L.Marker(p_loc, {icon: this.map.redIcon});
+        this.map.addLayer(p_marker);
         this.player_markers[user] = p_marker;
       }
     },
@@ -187,17 +223,6 @@ $(function(){
       this.userList.add(user);
       this.userListView.refresh();
     },
-    initializeMap: function(){
-      var DotIcon = L.Icon.extend({ iconUrl: 'js/images/blue_dot_circle.png', shadowUrl: null, iconSize: new L.Point(38, 38), iconAnchor: new L.Point(19, 19), popupAnchor: new L.Point(0, 0) });
-      this.blueIcon = new DotIcon();
-      this.redIcon = new DotIcon('js/images/red_dot_circle.png');
-
-      this.mapCanvas = new L.Map('map'), cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: this.map.get("maxZoom"), attribution: "cloudmade"});
-
-        this.mapCanvas.setView(this.map.getLocation(), this.map.get("zoom")).addLayer(cloudmade),
-      this.my_marker = new L.Marker(this.map.getLocation(), {icon: this.blueIcon});
-      this.mapCanvas.addLayer(this.my_marker);
-    }
   });
 
   var app = new AppView;
