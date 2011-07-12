@@ -80,7 +80,7 @@
 
       if (success) {
         $(this.el).find("input.title").val("");
-        $(this.el).find("input.rating").eq(0).click();
+        $(this.el).find("input.rating:checked").removeAttr("checked");
       }
       this.router.navigate("all", true);
     },
