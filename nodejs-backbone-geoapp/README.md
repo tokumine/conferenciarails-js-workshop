@@ -13,3 +13,11 @@ node app.js
 visit http://localhost:8080 in your browser (or in another browser of yours)
 
 
+Node application
+-----------------
+app.js
+
+
+Backbone application
+---------------------
+js/script.js
