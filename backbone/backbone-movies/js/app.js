@@ -2,14 +2,17 @@
   var Movie = Backbone.Model.extend({
     validate:function (attrs) {
       if ("title" in attrs && !attrs.title.match(/\S/)) {
-        return "Error, title cannot be empty";
+        return "Ey, the title cannot be empty!";
+      }
+      if ("rating" in attrs && !attrs.rating) {
+        return "Wow, you forgot to rate the film.";
       }
     }
   });
 
   var Movies = Backbone.Collection.extend({
     model: Movie,
-    localStorage: new Store("movies_")
+    localStorage: new Store("movies3")
   });
 
   var MovieView = Backbone.View.extend({
@@ -34,12 +37,12 @@
   var Routes = Backbone.Router.extend({
     routes: {
       "best": "best",
+      "worst": "worst",
       "all":  "all"
     },
-    best:function (){
-    },
-    all:function (){
-    }
+    best:function (){},
+    worst:function (){},
+    all:function (){}
   });
 
   var App = Backbone.View.extend({
@@ -52,11 +55,12 @@
 
       $(this.el).append(this.make("ul"));
 
-      _.bindAll(this, "addMovie", "addAllMovies", "showBestRated", "showAll");
+      _.bindAll(this, "addMovie", "addAllMovies", "showBestRated", "showWorstRated", "showAll");
 
       this.router = new Routes;
-      this.router.bind("route:best", this.showBestRated);
-      this.router.bind("route:all", this.showAll);
+      this.router.bind("route:best",  this.showBestRated);
+      this.router.bind("route:worst", this.showWorstRated);
+      this.router.bind("route:all",   this.showAll);
 
       this.movies = new Movies;
       this.movies.bind("add", this.addMovie);
@@ -97,6 +101,11 @@
     showBestRated:function () {
       $(this.el).find("ul").empty();
       var b = this.movies.select(function(movie){return movie.get("rating") == 5});
+      _.each(b, this.addMovie);
+    },
+    showWorstRated:function () {
+      $(this.el).find("ul").empty();
+      var b = this.movies.select(function(movie){return movie.get("rating") == 1});
       _.each(b, this.addMovie);
     }
   });

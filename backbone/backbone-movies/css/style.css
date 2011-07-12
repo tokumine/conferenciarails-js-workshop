@@ -63,9 +63,6 @@ input:invalid, textarea:invalid { border-radius: 1px; -moz-box-shadow: 0px 0px 5
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { background-color: #f0dddd; }
 
 
-::-moz-selection{ background: #FF5E99; color:#fff; text-shadow: none; }
-::selection { background:#FF5E99; color:#fff; text-shadow: none; }
-a:link { -webkit-tap-highlight-color: #FF5E99; }
 button {  width: auto; overflow: visible; }
 .ie7 img { -ms-interpolation-mode: bicubic; }
 
@@ -82,19 +79,22 @@ a:hover { color: #036; }
  */
 
 
-body {font-size:14px;}
-#movies { width:350px; padding: 10px;}
-#movies input.title { padding: 5px; width:250px; margin:0 0 5px 0; }
+body {font-size:15px; text-align:center; }
+#movies { width:450px; padding: 10px; margin:50px auto 0 auto; text-align:left;}
+#movies input.title { padding: 5px; width:350px; margin:0 0 10px 0; font-size: 18px; }
 #movies input.submit { float:right; clear:right; margin-top: 5px;}
-#movies div.rating {margin:0 0 20px 0;}
-#movies div.rating input {margin:0 5px 0 0;}
-#movies ul li {margin-bottom:5px;}
-#movies ul li span.remove {color:red; cursor:pointer;}
 
+#movies .rating {margin:0 0 30px 0; font-size: 13px; }
+#movies .rating label {margin:0 10px 0 0;}
+#movies .rating input {margin:0 5px 0 0;}
 
+#movies ul {list-style:none; margin:0;}
+#movies ul li {margin-bottom:5px; padding: 5px 0; border-bottom: 1px solid #ddd;}
+#movies ul li:first-child {border-top: 1px solid #ddd;}
+#movies ul li span.remove {color:red; float:right; cursor:pointer;}
+#movies ul li span.remove:hover {color:#333;}
 
-
-
+footer {width:450px; margin: 10px auto 0 auto; padding: 10px 0; }
 
 
 

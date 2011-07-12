@@ -25,29 +25,28 @@
     <input type="submit" name="send" class="submit" value="Add movie" />
 
     <div class="rating">
-      <label><input type="radio" class="rating" name="rating" value="1" checked />★</label>
+      <label><input type="radio" class="rating" name="rating" value="1" />★</label>
       <label><input type="radio" class="rating" name="rating" value="2" />★★</label>
       <label><input type="radio" class="rating" name="rating" value="3" />★★★</label>
       <label><input type="radio" class="rating" name="rating" value="4" />★★★★</label>
       <label><input type="radio" class="rating" name="rating" value="5" />★★★★★</label>
     </div>
-  </div>
 
-  <a href="#best">Best rated movies</a>
-  <a href="#all">All movies</a>
+  </div>
+  <footer>
+  <a href="#best">Best rated movies</a> &middot; <a href="#worst">Worst rated movies</a> &middot; <a href="#all">All movies</a>
+  </footer>
 
   <script type="text/template" id="movie-template">
-    <li><strong><%= title %></strong> &mdash; <%
+    <%
     for (var i = 1; i <= rating; i++) {
       print("★");
     }
     for (var i = 1; i <= 5 - rating; i++) {
       print("☆");
     }
-    %>
+    %> &mdash; <strong><%= title %></strong>
     <span class="remove">remove</span>
-
-    </li>
   </script>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
