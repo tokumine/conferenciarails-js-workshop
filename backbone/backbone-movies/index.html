@@ -21,14 +21,22 @@
 <body>
 
   <div id="movies">
-    <input type="text" name="movie" value="" placeholder="Title of the movie" />
-    <label><input type="radio" name="rating" value="1" checked />★</label>
-    <label><input type="radio" name="rating" value="2" />★★</label>
-    <label><input type="radio" name="rating" value="3" />★★★</label>
-    <label><input type="radio" name="rating" value="4" />★★★★</label>
-    <label><input type="radio" name="rating" value="5" />★★★★★</label>
-    <input type="submit" name="send" value="Add movie">
+    <input type="text" name="movie" class="title" placeholder="Title of the movie" />
+    <label><input type="radio" class="rating" name="rating" value="1" checked />★</label>
+    <label><input type="radio" class="rating" name="rating" value="2" />★★</label>
+    <label><input type="radio" class="rating" name="rating" value="3" />★★★</label>
+    <label><input type="radio" class="rating" name="rating" value="4" />★★★★</label>
+    <label><input type="radio" class="rating" name="rating" value="5" />★★★★★</label>
+    <input type="submit" name="send" value="Add movie" />
   </div>
+
+  <script type="text/template" id="movie-template">
+    <li><%= title %> <%
+    for (var i = 1; i <= rating; i++) {
+      print("★");
+    }
+    %></li>
+  </script>
 
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
