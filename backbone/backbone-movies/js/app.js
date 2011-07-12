@@ -20,6 +20,9 @@
 
   var MovieView = Backbone.View.extend({
     tagName:"li",
+    events:{
+      'click span.remove':'remove'
+    },
     template:_.template($("#movie-template").html()),
     initialize:function() {
       this.render();
@@ -27,6 +30,10 @@
     render:function(){
       $(this.el).append(this.template(this.model.toJSON()));
       return this;
+    },
+    remove:function() {
+      $(this.el).remove();
+      this.model.destroy();
     }
   });
 
@@ -65,7 +72,7 @@
     },
     addMovie:function(movie){
       var view = new MovieView({model:movie});
-      $(this.el).find("ul").append(view.el);
+      $(this.el).find("ul").prepend(view.el);
     }
   });
 
