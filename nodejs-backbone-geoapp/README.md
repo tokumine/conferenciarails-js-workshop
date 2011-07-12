@@ -4,7 +4,7 @@ Node.JS GeoChat server
 Install
 --------
 
-IMPORTANT! edit the ip address (line 9) in public/index.html to reflect your server's name/IP.
+IMPORTANT! edit IP_ADDRESS (line 4) in public/js/script.js to reflect your server's name/IP.
 
 Install node
 npm install

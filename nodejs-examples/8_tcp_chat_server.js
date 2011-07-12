@@ -15,7 +15,7 @@ var server = net.createServer(function(socket){
   
   socket.on('end', function(){
     var i = sockets.indexOf(socket);
-    delete sockets[i];
+    sockets.splice(i,1);
   })
 });
 
