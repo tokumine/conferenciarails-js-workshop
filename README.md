@@ -4,4 +4,4 @@ ConferenciaRails Backbone.js & Node.js workshop
 
 Here you'll find all the files and presentations from todays workshop. 
 
-You can also find the main handout online here: 
+You can find the main handout here: http://bit.ly/node-backbone-workshop
