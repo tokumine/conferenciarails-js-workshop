@@ -9,6 +9,7 @@
       this.bind("error", this.showError);
     },
     showError:function(model, message) {
+      console.log(model)
       alert(message);
     }
   });
@@ -63,7 +64,7 @@
       var title   = $(this.el).find("input.title").val();
       var rating  = $(this.el).find("input.rating:checked").val();
 
-      var success = this.movies.create({title: title, rating: rating});
+      var success = this.movies.create({title: title, rating: rating}, {error:this.showError});
 
       if (success) {
         $(this.el).find("input.title").val("");
@@ -76,6 +77,9 @@
     addMovie:function(movie){
       var view = new MovieView({model:movie});
       $(this.el).find("ul").prepend(view.el);
+    },
+    showError:function(model, error) {
+      alert(error);
     }
   });
 
