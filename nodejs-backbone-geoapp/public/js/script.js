@@ -1,5 +1,8 @@
 $(function(){
 
+  // if testing from a remote client, set this to your IP (eg '192.168.1.35')
+  var IP_ADDRESS = 'localhost';
+
   var User = Backbone.Model.extend({
     defaults:{
       me: false
@@ -182,7 +185,7 @@ $(function(){
       _.bindAll(this, "onReady", "onAnnouncement", "onUsernames", "onLocationData", "addUser");
 
       // Socket configuration && bindings
-      this.socket = io.connect('localhost'); // if remote SET this to your IP :) ('192.168.1.35')
+      this.socket = io.connect(IP_ADDRESS); 
       this.socket.on('ready', this.onReady);
       this.socket.on('announcement', this.onAnnouncement);
       this.socket.on('usernames', this.onUsernames);
