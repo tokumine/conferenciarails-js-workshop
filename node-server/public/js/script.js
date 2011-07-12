@@ -117,7 +117,7 @@ $(function(){
 
       _.bindAll(this, "onReady", "onAnnouncement", "onUsernames", "onLocationData", "addUser");
 
-      this.socket = io.connect(); // SET this to your IP :) (192.168.1.35)
+      this.socket = io.connect('localhost'); // SET this to your IP :) ('192.168.1.35')
       this.socket.on('ready', this.onReady);
       this.socket.on('announcement', this.onAnnouncement);
       this.socket.on('usernames', this.onUsernames);
