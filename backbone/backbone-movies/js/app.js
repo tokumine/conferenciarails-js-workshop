@@ -12,7 +12,9 @@
 
   var Movies = Backbone.Collection.extend({
     model: Movie,
-    localStorage: new Store("movies3")
+    url: 'http://localhost:3000/movies'
+
+    //localStorage: new Store("movies3")
   });
 
   var MovieView = Backbone.View.extend({
