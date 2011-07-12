@@ -4,13 +4,6 @@
       if ("title" in attrs && !attrs.title.match(/\S/)) {
         return "Error, title cannot be empty";
       }
-    },
-    initialize:function () {
-      this.bind("error", this.showError);
-    },
-    showError:function(model, message) {
-      console.log(model)
-      alert(message);
     }
   });
 
@@ -38,6 +31,17 @@
     }
   });
 
+  var Routes = Backbone.Router.extend({
+    routes: {
+      "best": "best",
+      "all":  "all"
+    },
+    best:function (){
+    },
+    all:function (){
+    }
+  });
+
   var App = Backbone.View.extend({
     el:"#movies",
     events:{
@@ -48,7 +52,11 @@
 
       $(this.el).append(this.make("ul"));
 
-      _.bindAll(this, "addMovie", "addAllMovies");
+      _.bindAll(this, "addMovie", "addAllMovies", "showBestRated", "showAll");
+
+      this.router = new Routes;
+      this.router.bind("route:best", this.showBestRated);
+      this.router.bind("route:all", this.showAll);
 
       this.movies = new Movies;
       this.movies.bind("add", this.addMovie);
@@ -70,6 +78,7 @@
         $(this.el).find("input.title").val("");
         $(this.el).find("input.rating").eq(0).click();
       }
+      this.router.navigate("all", true);
     },
     addAllMovies:function(){
       this.movies.each(this.addMovie);
@@ -80,9 +89,20 @@
     },
     showError:function(model, error) {
       alert(error);
+    },
+    showAll:function () {
+      $(this.el).find("ul").empty();
+      this.addAllMovies();
+    },
+    showBestRated:function () {
+      $(this.el).find("ul").empty();
+      var b = this.movies.select(function(movie){return movie.get("rating") == 5});
+      _.each(b, this.addMovie);
     }
   });
 
 $(function(){
+  var routes = new Routes;
   var app = new App;
+  Backbone.history.start();
 });
