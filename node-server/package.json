@@ -1,5 +1,5 @@
 {
-	"private": true,
+  "private": true,
   "name": "geo_chat",
   "description": "geospatial chat application",
   "version": "0.0.1",
