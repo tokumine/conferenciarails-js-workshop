@@ -63,9 +63,12 @@
       var title   = $(this.el).find("input.title").val();
       var rating  = $(this.el).find("input.rating:checked").val();
 
-      this.movies.create({title: title, rating: rating});
-      $(this.el).find("input.title").val("");
-      $(this.el).find("input.rating").eq(0).click();
+      var success = this.movies.create({title: title, rating: rating});
+
+      if (success) {
+        $(this.el).find("input.title").val("");
+        $(this.el).find("input.rating").eq(0).click();
+      }
     },
     addAllMovies:function(){
       this.movies.each(this.addMovie);
