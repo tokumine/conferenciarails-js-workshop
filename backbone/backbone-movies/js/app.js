@@ -99,23 +99,22 @@
       alert(error);
     },
     showAll:function () {
-      $(this.el).find("ul").empty();
+      this.$("ul").empty();
       this.addAllMovies();
     },
     showBestRated:function () {
-      $(this.el).find("ul").empty();
+      this.$("ul").empty();
       var b = this.movies.select(function(movie){return movie.get("rating") == 5});
       _.each(b, this.addMovie);
     },
     showWorstRated:function () {
-      $(this.el).find("ul").empty();
+      this.$("ul").empty();
       var b = this.movies.select(function(movie){return movie.get("rating") == 1});
       _.each(b, this.addMovie);
     }
   });
 
 $(function(){
-  var routes = new Routes;
   var app = new App;
   Backbone.history.start();
 });
