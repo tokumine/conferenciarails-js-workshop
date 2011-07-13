@@ -22,16 +22,20 @@
     },
     template:_.template($("#movie-template").html()),
     initialize:function() {
+      _.bindAll(this, "onSuccessRemoving");
       this.render();
     },
     render:function(){
       $(this.el).append(this.template(this.model.toJSON()));
       return this;
     },
-    remove:function() {
-      $(this.el).remove();
-      this.model.destroy();
+    remove:function () {
+      this.model.destroy({success:this.onSuccessRemoving});
+    },
+    onSuccessRemoving: function () {
+      $(this.el).fadeOut();
     }
+
   });
 
   var Routes = Backbone.Router.extend({
