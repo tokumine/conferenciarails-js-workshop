@@ -46,14 +46,14 @@
   });
 
   var App = Backbone.View.extend({
-    el:"#movies",
+    el:$("#movies"),
     events:{
       'click input[type="submit"]':'onSubmit',
       'keypress input.title':'onEnterKey'
     },
     initialize: function () {
 
-      $(this.el).append(this.make("ul"));
+      this.el.append(this.make("ul"));
 
       _.bindAll(this, "addMovie", "addAllMovies", "showBestRated", "showWorstRated", "showAll");
 
@@ -73,14 +73,14 @@
       }
     },
     onSubmit:function () {
-      var title   = $(this.el).find("input.title").val();
-      var rating  = $(this.el).find("input.rating:checked").val();
+      var title   = this.$("input.title").val();
+      var rating  = this.$("input.rating:checked").val();
 
       var success = this.movies.create({title: title, rating: rating}, {error:this.showError});
 
       if (success) {
-        $(this.el).find("input.title").val("");
-        $(this.el).find("input.rating:checked").removeAttr("checked");
+        this.$("input.title").val("");
+        this.$("input.rating:checked").removeAttr("checked");
       }
       this.router.navigate("all", true);
     },
